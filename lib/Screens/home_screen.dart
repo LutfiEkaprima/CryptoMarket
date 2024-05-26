@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projectuts/Screens/CoinChartScreen.dart';
-import 'package:projectuts/Screens/profile.dart';
 import 'package:projectuts/controllers/coin_controllers.dart';
 import 'package:projectuts/utils.dart';
-import 'package:projectuts/Screens/settings.dart';
 
 class HomeScreen extends StatelessWidget {
   final CoinController controller = Get.put(CoinController());
@@ -14,6 +12,8 @@ class HomeScreen extends StatelessWidget {
   static const IconData arrow_drop_down_rounded =
       IconData(0xf577, fontFamily: 'MaterialIcons');
 
+   HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -21,55 +21,7 @@ class HomeScreen extends StatelessWidget {
     final padding = screenWidth * 0.05;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Crypto Market",
-          style: textStyle(screenWidth * 0.050, Colors.black, FontWeight.bold),
-        ),
-        backgroundColor: Color.fromARGB(255, 241, 231, 234),
-      ),
-
-      //Drawer
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-
-      //Main Content
-      backgroundColor: Color.fromARGB(255, 241, 231, 234),
+      backgroundColor: const Color.fromARGB(255, 241, 231, 234),
       body: Padding(
         padding: EdgeInsets.only(
             left: padding, right: padding, top: screenHeight * 0.02),
@@ -82,7 +34,6 @@ class HomeScreen extends StatelessWidget {
                 "Crypto Watcher",
                 style: textStyle(screenWidth * 0.040, Colors.black, FontWeight.w400),
               ),
-              //Content Item
               const SizedBox(height: 20),
               Obx(
                 () => controller.isLoading.value

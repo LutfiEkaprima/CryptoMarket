@@ -7,7 +7,7 @@ import 'package:projectuts/models/coin_model.dart';
 class CoinChartScreen extends StatefulWidget {
   final Coin coin;
 
-  CoinChartScreen({required this.coin});
+  const CoinChartScreen({super.key, required this.coin});
 
   @override
   _CoinChartScreenState createState() => _CoinChartScreenState();
@@ -40,44 +40,51 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
         children: [
           Text(
             widget.coin.name,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           FutureBuilder<List<FlSpot>>(
             future: _futureData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No data available'));
+                return const Center(child: Text('No data available'));
               } else {
                 return Column(
                   children: [
                     SizedBox(
-                      height: 300, // Set height to prevent overflow
+                      height: 400, // Set height to prevent overflow
                       child: LineChart(
                         LineChartData(
                           gridData: FlGridData(show: false),
                           titlesData: FlTitlesData(
-                            bottomTitles: SideTitles(
-                              showTitles: false, // Sembunyikan semua teks pada sumbu x
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
-                            leftTitles: SideTitles(
-                              showTitles: false, // Hilangkan teks pada sumbu y kiri
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
-                            topTitles: SideTitles(
-                              showTitles: false, // Hilangkan teks pada sumbu atas
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
-                            rightTitles: SideTitles(
-                              showTitles: true, // Tetap tampilkan teks pada sumbu kanan
-                              getTextStyles: (value, size) => const TextStyle(color: Colors.black, fontSize: 12),
-                              margin: 8,
-                              reservedSize: 40, // Menyesuaikan lebar sumbu y agar tidak terlalu dekat dengan grafik
-                              getTitles: (value) {
-                                return _formatYAxisLabel(value); // Menggunakan fungsi untuk format label
-                              },
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      _formatYAxisLabel(value),
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                                  );
+                                },
+                                reservedSize: 40,
+                              ),
                             ),
                           ),
                           borderData: FlBorderData(
@@ -88,7 +95,7 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
                             LineChartBarData(
                               spots: snapshot.data!,
                               isCurved: true,
-                              colors: [Colors.blue],
+                              color: Colors.blue,
                               barWidth: 2,
                               isStrokeCapRound: true,
                               dotData: FlDotData(show: false),
@@ -98,8 +105,8 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8), // Tambahkan jarak antara grafik dan teks
-                    Text(
+                    const SizedBox(height: 8),
+                    const Text(
                       'CHART 3 HARI YANG LALU',
                       style: TextStyle(fontSize: 12, color: Colors.black),
                       textAlign: TextAlign.center,

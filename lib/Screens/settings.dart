@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text("Settings"),
+        backgroundColor: const Color.fromARGB(255, 241, 231, 234),
       ),
-      body: Center(
-        child: Text('This is the Settings Screen'),
+      body: const Center(
+        child: Text("Settings Screen"),
       ),
     );
   }
