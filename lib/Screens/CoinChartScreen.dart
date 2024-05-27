@@ -32,91 +32,110 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.coin.name,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          FutureBuilder<List<FlSpot>>(
-            future: _futureData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No data available'));
-              } else {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 400, // Set height to prevent overflow
-                      child: LineChart(
-                        LineChartData(
-                          gridData: FlGridData(show: false),
-                          titlesData: FlTitlesData(
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.coin.name),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            Text(
+              widget.coin.name,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            FutureBuilder<List<FlSpot>>(
+              future: _futureData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No data available'));
+                } else {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 400, // Set height to prevent overflow
+                        child: LineChart(
+                          LineChartData(
+                            gridData: FlGridData(
+                              show: true,
+                              drawVerticalLine: true,
+                              getDrawingVerticalLine: (value) {
+                                return const FlLine(
+                                  color: Colors.grey,
+                                  strokeWidth: 1,
+                                );
+                              },
+                              drawHorizontalLine: true,
+                              getDrawingHorizontalLine: (value) {
+                                return const FlLine(
+                                  color: Colors.grey,
+                                  strokeWidth: 1,
+                                );
+                              },
                             ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            topTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            rightTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      _formatYAxisLabel(value),
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 12),
-                                    ),
-                                  );
-                                },
-                                reservedSize: 40,
+                            titlesData: FlTitlesData(
+                              bottomTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              leftTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        _formatYAxisLabel(value),
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 12),
+                                      ),
+                                    );
+                                  },
+                                  reservedSize: 40,
+                                ),
                               ),
                             ),
-                          ),
-                          borderData: FlBorderData(
-                            show: true,
-                            border: Border.all(color: Colors.black, width: 1),
-                          ),
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: snapshot.data!,
-                              isCurved: true,
-                              color: Colors.blue,
-                              barWidth: 2,
-                              isStrokeCapRound: true,
-                              dotData: FlDotData(show: false),
-                              belowBarData: BarAreaData(show: false),
+                            borderData: FlBorderData(
+                              show: true,
+                              border: Border.all(color: Colors.black, width: 1),
                             ),
-                          ],
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: snapshot.data!,
+                                isCurved: true,
+                                color: const Color.fromARGB(255, 255, 0, 0),
+                                barWidth: 2,
+                                isStrokeCapRound: true,
+                                dotData: const FlDotData(show: true),
+                                belowBarData: BarAreaData(show: true),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'CHART 3 HARI YANG LALU',
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                );
-              }
-            },
-          ),
-        ],
+                      const SizedBox(height: 8),
+                      const Text(
+                        'CHART 3 HARI YANG LALU',
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,9 +22,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/profile.jpg
+    - assets/images/background/bgbitcoin.jpg
+    - assets/images/background/bgbitcoin2.jpg
+    - assets/images/background/bgbitcoin3.jpg
+    - assets/icons/icons.png
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icons.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21

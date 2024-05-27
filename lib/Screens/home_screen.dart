@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   static const IconData arrow_drop_down_rounded =
       IconData(0xf577, fontFamily: 'MaterialIcons');
 
-   HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +25,37 @@ class HomeScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.only(
             left: padding, right: padding, top: screenHeight * 0.02),
-        child: SingleChildScrollView(
-          physics: const ScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Text(
                 "Crypto Watcher",
                 style: textStyle(screenWidth * 0.040, Colors.black, FontWeight.w400),
               ),
-              const SizedBox(height: 20),
-              Obx(
-                () => controller.isLoading.value
-                    ? const Center(
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+            Obx(
+              () => controller.isLoading.value
+                  ? const SliverToBoxAdapter(
+                      child: Center(
                         child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: controller.coinsList.length,
-                        itemBuilder: (context, index) {
+                      ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
                           final coin = controller.coinsList[index];
                           return GestureDetector(
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
-                                builder: (context) =>
-                                    CoinChartScreen(coin: coin),
+                                builder: (context) => CoinChartScreen(coin: coin),
                               );
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 20.0),
                               child: SizedBox(
                                 width: screenWidth,
-                                height: 60,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -78,7 +75,6 @@ class HomeScreen extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(height: 10),
                                             Text(
                                               coin.name,
                                               style: textStyle(
@@ -98,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                                                             screenWidth * 0.05,
                                                       ),
                                                       Text(
-                                                        "${coin.priceChange24H.toStringAsFixed(2)} %".substring(0, coin.priceChange24H.toStringAsFixed(2).length >= 7 ? 7 : coin.priceChange24H.toStringAsFixed(2).length),
+                                                        "${coin.priceChange24H.toStringAsFixed(2)} %",
                                                         style: textStyle(
                                                           screenWidth * 0.035,
                                                           Colors.green,
@@ -117,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                                                             screenWidth * 0.05,
                                                       ),
                                                       Text(
-                                                        "${coin.priceChange24H.toStringAsFixed(2)} %".substring(0, coin.priceChange24H.toStringAsFixed(2).length >= 8 ? 8 : coin.priceChange24H.toStringAsFixed(2).length),
+                                                        "${coin.priceChange24H.toStringAsFixed(2)} %",
                                                         style: textStyle(
                                                           screenWidth * 0.035,
                                                           Colors.red,
@@ -132,26 +128,27 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          "\$ ${coin.currentPrice}",
-                                          style: textStyle(
-                                              screenWidth * 0.04,
-                                              Colors.black,
-                                              FontWeight.w600),
-                                        ),
-                                        Text(
-                                          coin.symbol,
-                                          style: textStyle(
-                                              screenWidth * 0.035,
-                                              Colors.grey,
-                                              FontWeight.w600),
-                                        ),
-                                      ],
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "\$ ${coin.currentPrice}",
+                                            style: textStyle(
+                                                screenWidth * 0.04,
+                                                Colors.black,
+                                                FontWeight.w600),
+                                          ),
+                                          Text(
+                                            coin.symbol,
+                                            style: textStyle(
+                                                screenWidth * 0.035,
+                                                Colors.grey,
+                                                FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -159,10 +156,11 @@ class HomeScreen extends StatelessWidget {
                             ),
                           );
                         },
+                        childCount: controller.coinsList.length,
                       ),
-              ),
-            ],
-          ),
+                    ),
+            ),
+          ],
         ),
       ),
     );

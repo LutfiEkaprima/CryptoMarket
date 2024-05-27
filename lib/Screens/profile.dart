@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:projectuts/profile_data.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projectuts/utils.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,51 +11,68 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileData = Provider.of<ProfileData>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = screenWidth * 0.05;
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 241, 231, 234),
       appBar: AppBar(
-        title: const Text("Profile"),
         backgroundColor: const Color.fromARGB(255, 241, 231, 234),
+        title: Text(
+          "Profile",
+          style: textStyle(screenWidth * 0.040, Colors.black, FontWeight.w400),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  _selectProfileImage(context, profileData);
-                },
-                child: CircleAvatar(
-                  radius: MediaQuery.of(context).size.width * 0.2,
-                  backgroundImage: profileData.profileImage != null
-                      ? FileImage(profileData.profileImage!)
-                      : const AssetImage('assets/images/profile.jpg') as ImageProvider,
+        padding: EdgeInsets.all(padding),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    _selectProfileImage(context, profileData);
+                  },
+                  child: CircleAvatar(
+                    radius: screenWidth * 0.2,
+                    backgroundImage: profileData.profileImage != null
+                        ? FileImage(profileData.profileImage!)
+                        : const AssetImage('assets/images/profile.jpg') as ImageProvider,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: Text(
-                profileData.name,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  profileData.name,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text(
-                profileData.nim,
-                style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  profileData.nim,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045,
+                    color: Colors.grey[600],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                _editProfile(context, profileData);
-              },
-              child: const Text("Edit Profile"),
-            ),
-          ],
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _editProfile(context, profileData);
+                },
+                child: Text(
+                  "Edit Profile",
+                  style: TextStyle(fontSize: screenWidth * 0.04),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -116,7 +134,6 @@ class ProfileScreen extends StatelessWidget {
     if (pickedFile != null) {
       profileData.updateProfileImage(File(pickedFile.path));
     } else {
-      print('No image selected.');
     }
   }
 }

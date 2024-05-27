@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:projectuts/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:projectuts/Screens/home_screen.dart';
 import 'package:projectuts/Screens/profile.dart';
 import 'package:projectuts/Screens/settings.dart';
-import 'package:projectuts/profile_data.dart';  // Import ProfileData
+import 'package:projectuts/profile_data.dart';
 
 class DrawerControllerApp extends StatefulWidget {
   final AdvancedDrawerController advancedDrawerController;
@@ -25,7 +26,7 @@ class _DrawerControllerAppState extends State<DrawerControllerApp> {
   @override
   Widget build(BuildContext context) {
     return AdvancedDrawer(
-      backdropColor: Colors.blueGrey,
+      backdropColor: const Color.fromARGB(255, 31, 30, 30),
       controller: widget.advancedDrawerController,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 500),
@@ -34,9 +35,9 @@ class _DrawerControllerAppState extends State<DrawerControllerApp> {
       openScale: 1.0,
       openRatio: 0.75,
       childDecoration: BoxDecoration(
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Color(0xffffeae3),
             blurRadius: 12.0,
           ),
         ],
@@ -51,11 +52,20 @@ class _DrawerControllerAppState extends State<DrawerControllerApp> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   UserAccountsDrawerHeader(
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(profileData.backgroundImage),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    accountName: Text(profileData.name),
-                    accountEmail: Text(profileData.nim),
+                    accountName: Text(
+                      profileData.name,
+                      style: textStyle(18, Color.fromARGB(255, 255, 255, 255), FontWeight.w600),
+                    ),
+                    accountEmail: Text(
+                      profileData.nim,
+                      style: textStyle(15, Color.fromARGB(255, 255, 255, 255), FontWeight.w500),
+                    ),
                     currentAccountPicture: CircleAvatar(
                       radius: 50,
                       backgroundImage: profileData.profileImage != null
@@ -64,19 +74,31 @@ class _DrawerControllerAppState extends State<DrawerControllerApp> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Home'),
+                    leading: const Icon(Icons.home, color: Colors.white,),
+                    title: Text(
+                      "Home",
+                      style: textStyle(18, const Color.fromARGB(255, 255, 255, 255), FontWeight.w600),
+                    ),
                     onTap: () {
                       widget.onItemTapped(0);
                     },
                   ),
                   ListTile(
-                    title: const Text('Profile'),
+                    leading: const Icon(Icons.person,color: Colors.white,),
+                    title: Text(
+                      "Profile",
+                      style: textStyle(18, const Color.fromARGB(255, 255, 255, 255), FontWeight.w600),
+                    ),
                     onTap: () {
                       widget.onItemTapped(1);
                     },
                   ),
                   ListTile(
-                    title: const Text('Settings'),
+                    leading: const Icon(Icons.settings,color: Colors.white,),
+                    title: Text(
+                      "Settings",
+                      style: textStyle(18, const Color.fromARGB(255, 255, 255, 255), FontWeight.w600),
+                    ),
                     onTap: () {
                       widget.onItemTapped(2);
                     },
@@ -111,8 +133,8 @@ class _DrawerControllerAppState extends State<DrawerControllerApp> {
           index: widget.selectedIndex,
           children: [
             HomeScreen(),
-            ProfileScreen(),
-            SettingsScreen(),
+            const ProfileScreen(),
+            const SettingsScreen(),
           ],
         ),
       ),
