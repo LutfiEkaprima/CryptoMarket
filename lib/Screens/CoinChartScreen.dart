@@ -15,11 +15,19 @@ class CoinChartScreen extends StatefulWidget {
 
 class _CoinChartScreenState extends State<CoinChartScreen> {
   late Future<List<FlSpot>> _futureData;
+  int _selectedInterval = 1; // Default interval is 1 day
 
   @override
   void initState() {
     super.initState();
-    _futureData = Get.find<CoinController>().fetchCoinHistory(widget.coin.id);
+    _futureData = Get.find<CoinController>().fetchCoinHistory(widget.coin.id, _selectedInterval);
+  }
+
+  void _updateChart(int interval) {
+    setState(() {
+      _selectedInterval = interval;
+      _futureData = Get.find<CoinController>().fetchCoinHistory(widget.coin.id, _selectedInterval);
+    });
   }
 
   String _formatYAxisLabel(double value) {
@@ -43,6 +51,16 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
             Text(
               widget.coin.name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildIntervalButton(1, '1 Hari'),
+                _buildIntervalButton(3, '3 Hari'),
+                _buildIntervalButton(5, '5 Hari'),
+                _buildIntervalButton(7, '7 Hari'),
+              ],
             ),
             const SizedBox(height: 16),
             FutureBuilder<List<FlSpot>>(
@@ -124,9 +142,9 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'CHART 3 HARI YANG LALU',
-                        style: TextStyle(fontSize: 12, color: Colors.black),
+                      Text(
+                        'CHART $_selectedInterval HARI YANG LALU',
+                        style: const TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -136,6 +154,16 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildIntervalButton(int interval, String text) {
+    return ElevatedButton(
+      onPressed: () => _updateChart(interval),
+      child: Text(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _selectedInterval == interval ? Colors.blue : Colors.grey,
       ),
     );
   }

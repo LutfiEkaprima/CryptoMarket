@@ -20,6 +20,11 @@ class CoinController extends GetxController {
       var response = await http.get(
         Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'),
       );
+
+      if (response.statusCode == 429) {
+        throw Exception("Rate Limit API, Max 30 Request Permenitnya");
+      }
+
       List<Coin> coins = coinFromJson(response.body);
       coinsList.value = coins;
     } finally {
@@ -27,19 +32,26 @@ class CoinController extends GetxController {
     }
   }
 
-  Future<List<FlSpot>> fetchCoinHistory(String coinId) async {
-    final response = await http.get(
-      Uri.parse('https://api.coingecko.com/api/v3/coins/$coinId/market_chart?vs_currency=usd&days=3'), // Ubah interval menjadi per hari dan gunakan 30 hari
-    );
+  Future<List<FlSpot>> fetchCoinHistory(String coinId, int days) async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://api.coingecko.com/api/v3/coins/$coinId/market_chart?vs_currency=usd&days=$days'),
+      );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body)['prices'] as List;
-      return data.asMap().entries.map((entry) {
-        return FlSpot(entry.key.toDouble(), entry.value[1]);
-      }).toList();
-    } else {
-      throw Exception('Failed to load coin history');
+      if (response.statusCode == 429) {
+        throw Exception("Rate Limit API, Max 30 Request Permenitnya");
+      }
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['prices'] as List;
+        return data.asMap().entries.map((entry) {
+          return FlSpot(entry.key.toDouble(), entry.value[1]);
+        }).toList();
+      } else {
+        throw Exception('Failed to load coin history');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
-
 }
