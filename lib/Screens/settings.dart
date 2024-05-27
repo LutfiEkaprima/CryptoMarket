@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectuts/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:projectuts/profile_data.dart';
 
@@ -63,9 +64,15 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 241, 231, 234),
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(
+          "Settings",
+          style: textStyle(screenWidth * 0.040, Colors.black, FontWeight.w400),
+        ),
         backgroundColor: const Color.fromARGB(255, 241, 231, 234),
       ),
       body: ListView(
