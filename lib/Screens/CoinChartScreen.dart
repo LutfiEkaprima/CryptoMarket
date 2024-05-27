@@ -15,7 +15,7 @@ class CoinChartScreen extends StatefulWidget {
 
 class _CoinChartScreenState extends State<CoinChartScreen> {
   late Future<List<FlSpot>> _futureData;
-  int _selectedInterval = 1; // Default interval is 1 day
+  int _selectedInterval = 1;
 
   @override
   void initState() {
