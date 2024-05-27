@@ -76,7 +76,7 @@ class _CoinChartScreenState extends State<CoinChartScreen> {
                   return Column(
                     children: [
                       SizedBox(
-                        height: 400, // Set height to prevent overflow
+                        height: 400,
                         child: LineChart(
                           LineChartData(
                             gridData: FlGridData(

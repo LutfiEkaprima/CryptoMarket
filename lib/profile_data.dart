@@ -5,7 +5,7 @@ class ProfileData with ChangeNotifier {
   String _name = "Lutfi Ekaprima Jannata";
   String _nim = "1152200006";
   File? _profileImage;
-  String _backgroundImage = "assets/images/background/bgbitcoin.jpg"; // Default background image
+  String _backgroundImage = "assets/images/background/bgbitcoin.jpg";
 
   String get name => _name;
   String get nim => _nim;
